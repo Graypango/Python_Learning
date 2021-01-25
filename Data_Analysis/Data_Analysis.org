@@ -1,0 +1,1361 @@
+#+TITLE: Data Analysis
+* 数据分析简介
+** 概念
+用适当的统计分析方法以及工具，对收集来的数据加以分析研究，从而形成结论。
+***  作用：现状分析、原因分析、预测分析
+*** 分析方法：分组、交叉、相关、回归、聚合等
+***  工具：excel,spss,power bi, tableau,python 等
+** Python 需要的模块：
+Numpy 科学计算模块是数据分析的基础模块
+matplotlib 绘图模块：曲线图、柱状图、散点图、饼图、3D 图形等
+pandas 模块：高等序列模块
+** Python 数据分析开发工具
+pycharm
+anaconda-jupyter notebook: 自带数据分析模块
+** 安装模块
+pip install numpy -i https://pypi.douban.com/simple/ pip install matplotlib pip install pandas pip install jupyter -i https://pypi.douban.com/simple/ 切换镜像
+** 数据分析
+加载数据、观察数据
+数据处理，清洗数据
+建模（完成 KPI）
+可视化（绘图）
+总结
+
+* numpy 模块
+** 概述
+
+概述： 补充了 python 所欠缺的计算内容，基于 c 语言开发
+底层
+案例 1: 附加柱状图写文本数字
+#+begin_src python
+data = {
+    "title":["苹果","橘子","香蕉","草莓"],
+    "number":['3','5.1','2.5','4'],
+    "price":['3.6','2','7.5','20.2']
+}
+
+money = []
+for num,pri in zip(data["number"], data["price"]):
+    money.append(float(num)*float(pri))
+print(money)
+data['金额']=money
+print(data)
+#+end_src
+
+使用 numpy 来编写
+#+begin_src python
+import numpy as np
+total_money=np.array(data['number'],dtype='float') * np.array(data['price'],dtype='float)
+data[total]=total_money
+print(data)
+#+end_src
+
+** 科学计算模块：numpy
+***  数据结构：数组 array, ndarray
+数组的创建
+数组的操作
+数组的方法、属性
+数组的数据类型（包括自定义类型）
+数组的维度操作
+数组的切片(访问数据)
+数组的掩码操作（清洗数据)
+数组的拆分和组合
+***  数组的创建：
+#+begin_src python
+array() #list/tuple
+arange(start,end,step) #create array
+ones(rol, col) #创建 1 数组
+zeros(row, col) #创建 0 数组
+random() #创建随机数组
+#+end_src
+
+#+begin_src python
+print('-----------1. Array---------')
+# 数据库中提取的元素是元组
+
+data = (110,120,119,911,114)
+arr = np.array(data)
+print(arr)
+# [110 120 119 911 114]
+
+data1 = [1,2,3,4,5]
+arr1 = np.array(data1)
+print(arr1)
+
+print('---------2. Arrange-------')
+arr2 = np.arange(1,100001)
+print(arr2)
+
+#create odd
+arr3 = np.arange(1,100,2)
+print(arr3)
+
+'''
+A couple with two child, one is boy another percentage of boy
+boy boy
+boy girl
+girl boy
+girl girl
+'''
+print('---------3. ones-------')
+arr4 = np.ones((4,5))
+print(arr4)
+# 4行5列
+
+print('---------4. zeros-------')
+arr5 = np.zeros((4,5))
+print(arr5)
+
+print('---------5. random-------')
+arr6 = np.random.randint(20,50,100) # 20-50取100个数字
+print(arr6)
+
+print('---------6. linspace-------')
+arr7 = np.linspace(1,10,5)
+print(arr7)
+# 正弦余弦
+print('---------7.normal-----------')
+# 随机出正态分布的数据
+arr8=np.random.normal(40,5,5) #最后个5是标准差
+print(arr8)
+#+end_src
+补充： linspace() 等分分布数组 random.normal()
+
+#+begin_src python 
+-----------1. Array---------
+[110 120 119 911 114]
+[1 2 3 4 5]
+---------2. Arrange-------
+[     1      2      3 ...  99998  99999 100000]
+[ 1  3  5  7  9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47
+ 49 51 53 55 57 59 61 63 65 67 69 71 73 75 77 79 81 83 85 87 89 91 93 95
+ 97 99]
+---------3. ones-------
+[[1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1.]]
+---------4. zeros-------
+[[0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]]
+---------5. random-------
+[26 39 46 44 30 45 31 40 31 33 27 26 36 34 23 44 39 39 27 27 24 25 46 36
+ 31 31 22 33 26 30 27 31 25 34 30 32 45 47 22 40 30 48 31 42 44 33 35 28
+ 43 38 25 28 33 24 46 44 42 32 30 35 37 36 25 29 38 41 37 34 26 29 34 43
+ 21 49 26 38 45 43 30 27 27 34 34 27 34 34 42 43 43 44 30 41 30 33 49 47
+ 23 30 39 48]
+---------6. linespace-------
+[ 1.    3.25  5.5   7.75 10.  ]
+---------7.normal-----------
+[296.36691684 -23.13720351 -92.60652126 -55.8042084  -49.46972615
+  57.55822035   7.40011128 -46.76407924 -48.70881013   6.4732535 ]
+#+end_src 
+
+***  数组的操作
+
+类型 dtype()：查询数组保存的数据类型 type()：查询变量的类型 astype(): 修改类型，
+
+#+begin_src python
+print('------------1.类型的操作-----------')
+'''
+    查看类型：dtype  (array中的数据的类型)
+    修改类型: astype
+    变量类型: type
+'''
+arr = np.array([1,2,3,4,5])
+print(arr)
+print(type(arr))
+print(arr.dtype)
+# 较大的数字会出现数据溢出的情况
+arr1 = arr.astype('str') # int str都可以
+print(arr1)
+
+arr2 = np.array([1,2,3],dtype='str')
+print(arr2)
+
+print('--------------------------------')
+nums = [1,2,3,4,5]
+print(nums[0])
+print(nums[:1])
+#上面是整数，下面是列表
+'''
+1
+[1]
+'''
+# 长度 len(): 一维的长度（表示行数） size 元素个数
+
+print('------------2.长度的操作-----------')
+data = [
+    [1,2,3],
+    [4,5,6],
+    [7,8,9],
+    [110,120,130]
+]
+arr3 = np.array(data)
+print('长度', len(arr3))
+print('长度', arr3.size)
+# len只能得出一维下面的元素，表示行数
+# size 元素个数， 需要确保每个行中的元素相等。长度必须相等：bug
+# 下标一维下标和字符串、元组、列表一样二维下标[行，列]
+
+print('------------3.下标的操作-----------')
+data = [
+    [1,2,3],
+    [4,5,6],
+    [7,8,9]
+]
+arr4 = np.array(data)
+print("数组获取6的方式", arr4[1,-1])  # 几行几列
+print("数组获取8和9的方式", arr4[-1,[1,2]])
+#+end_src
+
+*** 数组的属性
+属性	解释
+shape	形状（行，列）
+dtype	元素类型
+size	数量的查询
+ndim	维度查询
+itemsize	元素字节数
+nbytes	总字节数
+real	复数数组的实部数组
+imag	复数数组的虚部数组
+T	数组的转制
+flat	迭代器
+#+begin_src python
+import numpy as np
+data = [
+    [1+2j,3+4j, 5+6j],
+    [4+3j,5+9j, 6+3j],
+    [7+2j,8+2j, 9+9j]
+]
+
+arr = np.array(data)
+print('shape', arr.shape)
+print('dtype:',arr.dtype)
+print('size:',arr.size)
+print('real',arr.real)
+print('img',arr.imag)
+print('itemsize',arr.itemsize)
+print('nbytes',arr.nbytes)
+print('dimention',arr.ndim)
+print('T',arr.T)
+
+shape (3, 3)
+dtype: complex128
+size: 9
+real [[1. 3. 5.]
+ [4. 5. 6.]
+ [7. 8. 9.]]
+img [[2. 4. 6.]
+ [3. 9. 3.]
+ [2. 2. 9.]]
+itemsize 16
+nbytes 144
+dimention 2
+T [[1.+2.j 4.+3.j 7.+2.j]
+ [3.+4.j 5.+9.j 8.+2.j]
+ [5.+6.j 6.+3.j 9.+9.j]]
+#+end_src 
+
+*** 统计行功能函数
+
+sum max min std mean mid … 参数： axis 轴, 用 0 和 1 表示，1表示水平方向，0表示垂直方向, 不带参数计算总和
+#+begin_src python
+#计算每个学生的总分
+print(np.sum(arr1['f1'], axis=1))
+#计算语文的平均分
+print('语文的平均分：', np.mean(arr1['f1'],axis=0)[0]) # 坑！
+#+end_src
+
+***  数据类型
+
+类型名	类型表示符
+布尔型	bool
+有符号整数型	int(-128-127)/int16/int32/int64
+无符号整数型	uint8(0-255)/uint16/uint32/uint64
+浮点型	float16/float32/float64
+复数型	complex64/complex128
+字符串型	str unicode:U4 编码表示
+例如字符串型： str unicode: U4 赵钱孙李周吴郑王 只能显示赵钱孙李 <U4 长度只能显示前面几个
+#+begin_src python
+import numpy as np
+data = [
+    ('lufi', [55,60,30], 18),
+    ('zoro', [70,80,50], 25),
+    ('nami', [88,90,95], 17)
+]
+
+arr = np.array(data)
+print(arr)
+print(arr[0, 1])
+#+end_src
+定义类型的好处：指定类型：指定列的数据类型快速访问：通过列名访问该列数据
+
+#+begin_src python
+# 操作上述代码
+print('----------1、字符串-----------')
+arr1 = np.array(data, dtype='U10,3int,int') # 数据都有了数据类型
+print(arr1)
+# 原来数组里面套数组， 现在变为了数组里面套元组
+# 字符串定义类型，没有列名：f0,f1,f2
+# 输出结果[('lufi', [55, 60, 30], 18) ('zoro', [70, 80, 50], 25) ('nami', [88, 90, 95], 17)]
+# 提取所有学生的名字
+# 原来的方法： arr[[0,1,2],0]
+print(arr1['f0'])
+print(sum(arr1['f1']))
+#['lufi' 'zoro' 'nami']
+#[213 230 175]
+#计算每个学生的总分
+print(np.sum(arr1['f1'], axis=1))
+#计算语文的平均分
+print('语文的平均分：', np.mean(arr1['f1'],axis=0)[0]) # 坑！
+#+end_src
+1：水平
+
+字符串
+	str
+	unicode：U4 赵钱孙李周吴郑王
+		 <U4
+
+定义类型的好处：
+     指定列的数据类型
+     通过列名访问该列数据
+
+---------------------------------------------
+列表：可以定义访问的数据列名
+	[(列名 1,类型 1),(列名 2,类型 2)...]
+
+---------------------------------------------
+字典
+	{
+		'names': [xx,xxx,xx,xx],
+		'formats': [xx,xx,xx,xx]
+	}
+
+----------------------------------------------------
+日期类型：M8[D]
+好处：排序、运算等
+'1','11','9','23','4' 字符串无法排序
+
+D：日
+M：月
+Y：年
+h：时
+m：分
+s：秒
+*** numpy：文件操作
+功能：loadtxt(文件名)
+
+练习：
+1、添加税这一列，税点 3.14%
+2、添加小计这一列
+3、计算出总计
+10000 3.14  10001.14
+*** numpy操作内容补充
+**** 维度操作
+***** 视图变维：数据共享
+****** reshape() （行，列）
+通过视图变维产生新的变量
+#+begin_src python
+import numpy as np
+arr =np.arange(1,13)
+arr2 = arr.reshape((4,3))
+arr2
+#+end_src
+
+#+result:
+: array([[ 1,  2,  3],[ 4,  5,  6], [ 7,  8,  9], [10, 11, 12]])
+
+****** ravel() 还原1维数组
+#+begin_src python
+arr3 = arr2.ravel()
+arr3
+#+end_src
+
+#+result: 
+: array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12])
+
+***** 复制变维：数据独立
+flatten() 复制数组还原为1维度
+#+begin_src python
+arr4 = arra2.flatten()
+arr4
+#+end_src
+/*flatten()和ravel()的区别是flatten是复制一份出来，但是ravel()是直接复制*/
+#+result:
+: array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12])
+
+***** 就地变维： 自身操作
+****** shape
+#+begin_src python
+data = np.arange(1,17).reshape(4,4)
+print(data)
+
+data.shape = (2,8)
+print(data)
+#end_src
+
+#+result:
+: [[ 1  2  3  4]
+ [ 5  6  7  8]
+ [ 9 10 11 12]
+ [13 14 15 16]]
+: [[ 1  2  3  4  5  6  7  8]
+ [ 9 10 11 12 13 14 15 16]]
+
+****** resize
+#+begin_src python
+data.resize(8,2)
+print(data)
+#+end_src
+
+#+result:
+[[ 1  2]
+ [ 3  4]
+ [ 5  6]
+ [ 7  8]
+ [ 9 10]
+ [11 12]
+ [13 14]
+ [15 16]]
+
+**** 切片（筛选数据）
+基础的数据结构: [start: end: stop]
+数组：step默认为1
+***** 二维切片
+【行的切片，列的切片】
+#+begin_src python
+[[1,2,3],
+[4,5,6],
+[7,8,9]
+[110,120,130]]
+#end_src
+后两列切片： [:,1:]
+
+举例：
+#+begin_src python
+arr = np.random.randint(1,50,20).reshape((4,5))
+#获取2，3列
+arr[:,1:3]  #用法1，行的切片，列的切片
+
+arr[:,[0,3,4]] #用法2，行的下表
+#+end_src
+
+#+result:
+: array([[20, 37],
+       [ 8, 42],
+       [12, 27],
+       [11, 35]])
+
+#+result:
+: array([[ 1, 23, 23],
+       [27, 23, 36],
+       [ 2, 30, 24],
+       [45, 31,  4]])
+***** 三维切片
+[页码， 列， 行]
+#+begin_src python
+#三位切片
+import numpy as np
+data =np.random.randint(1,50,27).reshape((3,3,3))
+
+#获取第2，3页的后两列数据
+data([1:,:,1:])
+#+end_src
+
+#+result:
+: array([[[29,  8,  9],
+        [42, 34, 39],
+        [ 6, 49, 35]],
+
+       [[14,  4, 47],
+        [22, 47, 35],
+        [45, 30, 42]],
+
+       [[22, 29, 21],
+        [11, 36, 47],
+        [38,  1, 35]]])
+
+**** 掩码（筛选数据、清晰数据）
+1. 根据True, False筛选数据
+#+begin_src python
+import numpy as np
+arr = np.array([1,2,3,4,5,6])
+mask = [True, False, False, False, False, False]
+res = arr[mask]
+res
+#+end_src
+
+#+result
+: array([1])
+
+2. 根据条件筛选数据
+#+begin_src python
+arr1 = np.random.randint(1,100,20)
+arr1
+#筛选60分以上的数据
+res = arr1[arr1>60]
+print(arr1)
+#+end_src
+- 使用的与或非： &, |, ~
+- 每个条件必须使用括号
+例如：筛选1-10和90-100的
+#+begin_src
+res1 = arr1[(arr1<=10)|(arr1>=90)]
+res1
+#+end_src
+
+3. 重新筛选排列
+#+begin_src
+arr2 = np.array([110, 120, 119, 911, 114, 12345])
+mask = [1,4,2]
+res2 = arr2[mask]
+res2
+#+end_src
+#+result:
+: array([120, 114, 119])
+通过掩码将数据进行重新排列
+
+**** 拆分和组合
+
+
+
+** numpy 补充: 
+*** 网易云课堂
+**** 简介
+***** 如何改变初始位置
+****** 修改默认路径 修改配置文件
+在shell中输入 =Jupyter Notebook --generate-config=
+
+
+
+****** HOLD 查找对应.jupyter隐藏文件中的.py， 搜索directory，并查找并修改位置
+***** array是可以直接和数字相加的
+#+begin_src python
+import numpy as np
+array = np.array([1,2,3,4,5])
+print(type(array))
+array + 1 
+#+end_src
+***** array.shape : 一维向量有五个数值
+
+**** array结构
+***** 对于ndarray结构来说，里面所有的元素必须是同一类型的，如果不是的话，会自动向下进行转化。
+#+begin_src python
+import numpy as np
+tang_list = [1,2,3,4.1,'5']
+tang_array = np.array(tang_list)
+tang_array
+#+end_src
+
+#+result: 
+: array(['1', '2', '3', '4.1', '5'], dtype='<U21'
+***** 基本属性操作
+1. Type()方法: 
+2. dtype 属性
+3. itemize属性 # 可能有问题
+4. shape属性
+5. size()方法
+6. shape()方法
+7. ndim()属性
+8. fill()方法
+9. nbytes属性
+#+begin_src python
+import numpy as np
+tang_list = [1,2,3,4.1,5]
+tang_array = np.array(tang_list)
+tang_array.fill(0)
+tang_array
+#+end_src
+
+#+result:
+: array([0,0,0,0,0])
+***** 切片：跟Python都是一样的，还是从0开始
+1. 取一个数字
+#+begin_src python
+tang_array = np.array([[1,2,3],[4,5,6],[7,8,9]])
+tang_array[1][1]
+#+end_src
+
+#+result
+: 5
+
+2. 取第二维所有数据
+=tang_array[: , 1]=
+
+3. 取任意数值
+=tang_array[0, 0:2]=
+
+4. 赋值：
+#+begin_src python
+tang_array2 = tang_array
+tang_array2[1][1] = 100
+tang_array
+#+end_src
+修改array2的时候也同时修改了array
+
+5. copy()方法可以进行拷贝任务。
+***** REVIEW 索引
+1. np.arange()方法
+#+begin_src python
+tang_array = np.arange(0,100,10)
+tang_array
+mask = np.array([0,0,0,0,0,0,0,1,1,1,1],dtype=bool)
+mask
+tang_arrary[mask]
+#+end_src
+
+#+result:
+: array([ 0, 10, 20, 30, 40, 50, 60, 70, 80, 90])
+: array([False, False, False, False, False, False,  True,  True,  True, True])
+: array([60, 70, 80, 90])
+2. np.random()方法: 
+#+begin_src python
+rand_array = np.random.rand(10)
+rand_array
+
+mask = rand_array > 0.5
+mask 
+
+rand_array[mask]
+#+end_src
+
+#+result
+: array([0.96797252, 0.76555229, 0.8068026 , 0.75378939])
+3. np.where()
+告诉索引位置例如：
+=np.where(tang_array>30)=
+
+***** TODO 数据类型
+1. dtype
+#+begin_src python
+tang_array = np.array([1,2,3,4,5]， dtype=np.float32)
+tang_array
+#+end_src
+#+result:
+: array([1., 2., 3., 4., 5.], dtype=float32)
+2. nbytes
+=tang_array.nbytes=
+3. object  /*jupyter notebook*/ 有bug
+#+begin_src  python
+tang_array = np.array([1,10,3.5,'str'], dtype = np.ojbect)
+tang_array
+#+end_src
+
+#+result
+: [1 10 3 5 'str']
+4. astype() 转换数组内部数据类型
+=tang_array.astype(np.astype(float32)=
+***** 数值计算方法：
+1. max()方法 ， 其中可以引入参数axis = 0 行， asix=1列
+2. sum()方法
+3. argmin() 找位置
+#+begin_src python
+tang_array = np.array([[1,2,3],[4,5,6]])
+tang_array.argmin(axis = 1)
+#+end_src
+#+result:
+: array([0,0], dtype=int64)
+4. mean()
+5. std()标准差
+6. var()
+7. clip() 截断
+=tang_array.clip(2,4)= 从谁开始到谁结束
+#+begin_src python
+tang_array = np.array([[1,2,3],[4,5,6]])
+tang_array.clip(2,4)
+#+end_src
+
+#+result:
+: array([[2,2,3],[4,4,4]])
+8. round(decimals = 1) 
+#没有decimals=1就不保留小数位
+***** 排序操作
+1. sort(data, axis=0)
+2. argsort(data) 排序并返回位置
+3. linspace()
+=tang_array = np.linspace(0,10,10)=
+从0-10等间隔生成数据
+#+result
+: [ 0.          1.11111111  2.22222222  3.33333333  4.44444444  5.55555556 6.66666667  7.77777778  8.88888889 10.        ]
+4. searchsorted()
+#+begin_src python
+values = np.array([2.5, 6.5, 9.5])
+tang_array = np.linspace(0,10,10)
+np.searchsorted(tang_array, values)
+#+end_src
+
+将2.5，6.5， 9.5插入到tang_array中返回插入位置
+#+result:
+: array([3, 6, 9)], dtype = int64)
+5. lexsort()
+例子，第一列降序的同时，第三列升序来排列
+#+begin_src python
+tang_array =  np.array([[1,0,6],
+                       [1,7,0],
+                       [2,3,1],
+                       [2,4,0]]
+)
+
+                       
+index = np.lexsort([-1*tang_array[:,-0], tang_array[:,2]])
+index
+#+end_src
+
+#+result
+: array([3, 1, 2, 0])
+
+***** 数组的形状
+1.  shape 将数据改成几行几lie
+例如:
+#+begin_src python
+tang_array = np.array([1,2,3,4,5,6,7,8,9])
+tang_array.shape
+tang_array.shape = 2,5
+#+end_src
+
+#+RESULTS:
+
+#+result:
+: array([[0,1,2,3,4],[5,,6,7,8,9 ]])
+
+2.reshape
+=tang_array.reshpae(1,10)=
+前提是大小不能变
+#+begin_src python
+
+#+end_src
+
+3.增加一个维度
+#+begin_src python
+tang_array = np.arange(10)
+tang_array.shape
+tang_array = tang_array[np.newaxis,:]
+tang_array.shape 
+#+end_src
+
+#+result
+: (10,)
+: (1, 10)
+
+4. squeeze()
+去除冗余数据
+5. T 转制
+
+6. concatenate((a,b), axis = 0)
+连接两个矩阵
+
+7，vstack，hstack（）拼接
+8, * flatten() 拉长拼操作* 把数组变成一维数组 
+***** 数组的生成
+1. .arange(start, end, step)
+2. .linspace(start, end, split)
+3. .logspace(start, end, split) 对数，以10为底
+4. .zeros ones(dimx, dimy)
+5. .empty()
+#+begin_src python
+a = np.empty(6)
+a.shape
+#+end_src
+#+RESULTS:
+ : (6,)
+6. .fill(number) 填充数字
+7. * .zeros_like(ndarray)* 
+创建一个维度一样的空数组
+#+begin_src python
+tang_array = np.array([1,2,3,4])
+np.zeros_like(tang_array)
+#+end_src
+#+result
+: array([0,0,0,0])
+8. .ones_like(tang_array)
+#+begin_src  python 
+tang_array = np.array([1,2,3,4])
+np.ones_like(tang_array)
+#+end_src
+9. .identity(5) 
+构建对角阵
+***** 数组的运算
+1. .multiply(data1, data2)
+数组一维的时候是内积计算
+数组二维的时候相当于矩阵相乘计算
+2. .logical_and(x,y)
+3. .logical_or(x,y)
+4. .logical_not(x,y)
+***** Numpy的随机模块
+1. .random.rand(3,2) 随机生成三行两列的矩阵
+2. .random.randint(10, size=(5,4)) 从0-10取随机数
+3. 创建随机高斯分布
+#+begin_src python
+mu, signma = 0, 0.1
+np.random.normal(mu, sigma, 10)
+#+end_src
+=np. set_printoptions(precision=2)=
+精度保留两位
+4. .random.shuffle(data) 洗牌操作
+5. .random.seed(100) 随机种子，对数据集进行划分？
+***** 读写操作
+1. 读写array结构
+#+begin_src python
+tang_array = np.array([[1,2,3],[4,5,6]])
+np.save('tang_array.npy', tang_array)
+#+end_src
+2. .load()文件
+=np.load('tang_array.npy')=
+
+* matplotlib 模块
+** 简介：
+*** 基本绘图
+plot 曲线图绘制
+线型的设置
+线宽的设置
+颜色的设置
+范围的设置
+刻度的设置
+图利的设置
+特殊点的设置
+备注
+**** 创建一个图表
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+# 准备数据
+month = np.arange(1,13)
+money = np.random.randint(80,100,12)
+
+# 绘图操作
+# step1: 设置图标的文字字体
+plt.rcParams['font.sans-serif'] = ['Kai']
+
+# step2: 绘制图形
+plt.plot(month, money)  #x轴和y轴
+
+# step3: 添加相关设置
+plt.title('2020年股票走势图')
+plt.xlabel('月份')
+plt.ylabel('金额')
+
+# Step 4: 显示图形
+plt.show()
+
+# Step 5: 保存图片并显示图片
+plt.savefig('2020年股票走势图.jpg')
+plt.show()
+#+end_src
+
+#+RESULTS:
+
+** 方法使用
+**** plot 绘制曲线图
+**** xlabel， ylabel设置坐标轴名字
+**** title 设置图标标题
+**** xlim, ylim 设置坐标轴范围
+=plt.xlim(7,12)=
+查看7-12月份的
+**** vlines, hlines: 设置垂直，水平线
+=plt.hlines(np.mean(money), 1, 12)=  #绘制均线
+**** 设置线的线型、颜色，线宽、透明度等(plot里面设置)
+   linestype
+   linewidth
+   color
+   alpha
+#+begin_src python
+'''
+绘制正弦，余弦
+'''
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['font.sans-serif'] = ['Dejavu']
+
+x = np.linspace(-np.pi, np.pi, 1000)
+#正弦
+sin_y = np.sin(x)
+#余弦 /2
+cos_y = np.cos(x)/2
+
+#画图
+plt.plot(x, sin_y, linewidth=1.5, linestyle=':', color='red', alpha=0.8)
+plt.plot(x, cos_y, linewidth=1.5, linestype='-', color='green', alpha=0.8)
+#显示
+plt.show()
+#+end_src
+
+**** 坐标轴刻度
+xticks(值，文本)
+yticks(值，文本)
+1 2 3 4 5
+一月 二月 三月 四月 五月
+**** Latex排版语法
+r'$-\pi$'
+r'$\frac{\pi}{2}$'
+#+begin_src python
+'''
+绘制正弦，余弦
+'''
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['font.sans-serif'] = ['Kai']
+
+x = np.linspace(-np.pi, np.pi, 1000)
+#正弦
+sin_y = np.sin(x)
+#余弦 /2
+cos_y = np.cos(x)/2
+
+#画图
+plt.plot(x, sin_y) #, linewidth=1.5, linestyle=':', color='red', alpha=0.8)
+plt.plot(x, cos_y) #, linewidth=1.5, linestype='-', color='green', alpha=0.8)
+
+#刻度
+plt.xticks([-np.pi, -np.pi/2, 0, np.pi/2, np.pi], [r'$-\pi$',r'$-\frac{\pi}{2}$','0',r'$\frac{\pi}{2}$',r'$\pi$'])
+plt.yticks([-1, -1/2, 0, 1/2, 1],['-1',r'$-\frac{1}{2}$',0, r'$\frac{1}{2}$', '1'])
+#显示
+plt.show()
+#+end_src
+**** 坐标轴
+   plt.gca()创建坐标轴对象
+   spines 类似于字典：left, right, top, bottom
+#+begin_src python
+'''
+绘制正弦，余弦
+'''
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['font.sans-serif'] = ['Kai']
+
+x = np.linspace(-np.pi, np.pi, 1000)
+#正弦
+sin_y = np.sin(x)
+#余弦 /2
+cos_y = np.cos(x)/2
+
+#画图
+plt.plot(x, sin_y) #, linewidth=1.5, linestyle=':', color='red', alpha=0.8)
+plt.plot(x, cos_y) #, linewidth=1.5, linestyle='-', color='green', alpha=0.8)
+
+#刻度
+plt.xticks([-np.pi, -np.pi/2, 0, np.pi/2, np.pi], [r'$-\pi$',r'$-\frac{\pi}{2}$','0',r'$\frac{\pi}{2}$',r'$\pi$'])
+plt.yticks([-1, -1/2, 0, 1/2, 1],['-1',r'$-\frac{1}{2}$',0, r'$\frac{1}{2}$', '1'])
+#显示
+
+#坐标轴, 目标去掉上轴和右轴，然后下轴，左轴移动到中心点
+pg = plt.gca()
+pg.spines['left'].set_position(('data',0))  #写0就是以数据为基准向0移动
+pg.spines['right'].set_color(None)
+pg.spines['top'].set_color(None)
+pg.spines['bottom'].set_position(('data',0))
+
+plt.show()
+#+end_src
+
+**** 图例: label (plot里面设置)
+    显示图例：legend(loc=位置)
+位置默认右上角: 可以用upper lower right left组成
+#+begin_src python
+'''
+绘制正弦，余弦
+'''
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['font.sans-serif'] = ['Kai']
+
+x = np.linspace(-np.pi, np.pi, 1000)
+sin_y = np.sin(x)
+cos_y = np.cos(x)/2
+
+plt.plot(x, sin_y, label='sin线') #, linewidth=1.5, linestyle=':', color='red', alpha=0.8)
+plt.plot(x, cos_y, label=r'$\frac{cos}{2}$'+'线') #, linewidth=1.5, linestyle='-', color='green', alpha=0.8)
+
+plt.xticks([-np.pi, -np.pi/2, 0, np.pi/2, np.pi], [r'$-\pi$',r'$-\frac{\pi}{2}$','0',r'$\frac{\pi}{2}$',r'$\pi$'])
+plt.yticks([-1, -1/2, 0, 1/2, 1],['-1',r'$-\frac{1}{2}$',0, r'$\frac{1}{2}$', '1'])
+plt.legend(loc='upper left')  #创建说明框（图例）
+
+pg = plt.gca()
+pg.spines['left'].set_position(('data',0))
+pg.spines['right'].set_color(None)
+pg.spines['top'].set_color(None)
+pg.spines['bottom'].set_position(('data',0))
+
+plt.show()
+#+end_src
+**** 特殊点（点）：scatter
+x, y
+marker= 点型
+s = 点的大小
+备注： 绘制3/4pi 对应的cos点
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['font.sans-serif'] = ['Kai']
+
+x = np.linspace(-np.pi, np.pi, 1000)
+sin_y = np.sin(x)
+cos_y = np.cos(x)/2
+
+plt.plot(x, sin_y, label='sin线') #, linewidth=1.5, linestyle=':', color='red', alpha=0.8)
+plt.plot(x, cos_y, label=r'$\frac{cos}{2}$'+'线') #, linewidth=1.5, linestyle='-', color='green', alpha=0.8)
+
+plt.xticks([-np.pi, -np.pi/2, 0, np.pi/2, np.pi], [r'$-\pi$',r'$-\frac{\pi}{2}$','0',r'$\frac{\pi}{2}$',r'$\pi$'])
+plt.yticks([-1, -1/2, 0, 1/2, 1],['-1',r'$-\frac{1}{2}$',0, r'$\frac{1}{2}$', '1'])
+plt.legend(loc='upper left')
+
+#特殊点
+point_x = np.pi * 3/4
+point_y = np.cos(point_x)/2
+plt.scatter(point_x, point_y) #, maker='*', s=80, color='red')
+
+
+pg = plt.gca()
+pg.spines['left'].set_position(('data',0))
+pg.spines['right'].set_color(None)
+pg.spines['top'].set_color(None)
+pg.spines['bottom'].set_position(('data',0))
+
+plt.show()
+#+end_src
+
+**** 备注：annotate
+    1. 设置备注的文本
+    2. 设置备注的坐标
+    3. 设置备注的文本大小
+    4. 箭头连接样式
+    5. 偏移的设置
+    6. 文本的坐标点
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.lines import Line2D
+plt.rcParams['font.sans-serif'] = ['Kai']
+
+x = np.linspace(-np.pi, np.pi, 1000)
+sin_y = np.sin(x)
+cos_y = np.cos(x)/2
+
+plt.plot(x, sin_y, label='sin线') #, linewidth=1.5, linestyle=':', color='red', alpha=0.8)
+plt.plot(x, cos_y, label=r'$\frac{cos}{2}$'+'线') #, linewidth=1.5, linestyle='-', color='green', alpha=0.8)
+
+plt.xticks([-np.pi, -np.pi/2, 0, np.pi/2, np.pi], [r'$-\pi$',r'$-\frac{\pi}{2}$','0',r'$\frac{\pi}{2}$',r'$\pi$'])
+plt.yticks([-1, -1/2, 0, 1/2, 1],['-1',r'$-\frac{1}{2}$',0, r'$\frac{1}{2}$', '1'])
+plt.legend(loc='upper left')
+
+point_x = np.pi * 3/4
+point_y = np.cos(point_x)/2
+plt.scatter(point_x, point_y) #, maker='*', s=80, color='red')
+
+#备注
+plt.annotate(
+    '卖出点',
+    xy =(point_x, point_y),
+    textcoords='offset points', #以当前备注的点为基点
+    xytext=(-40,40), #设置备注的坐标
+    fontsize = 16,
+    arrowprops = {
+        'arrowstyle':'->',
+        'connectionstyle':'angle3'
+    }
+)
+pg = plt.gca()
+pg.spines['left'].set_position(('data',0))
+pg.spines['right'].set_color(None)
+pg.spines['top'].set_color(None)
+pg.spines['bottom'].set_position(('data',0))
+
+plt.show()
+#+end_src
+
+#+RESULTS:
+: None
+
+** 窗口绘图
+*** 基本图形
+figuare 对象
+子图-布局
+刻度器
+刻度网格线
+半对数坐标
+散点图
+填充图
+柱状图
+饼状图
+等高线图
+热成像图
+3D图形:附加
+*** 图形窗口绘图：figure
+相当于相框：可以显示多张图表
+**** figure的基本设置
+标题：指代窗口的的标题
+颜色：背景颜色
+网格线：grid
+...
+案例： 绘制2019年，2020年股票走势图
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+plt.rcParams['font.sans-serif'] = ['Kai']
+#绘制2019，2020的股票分析图
+month = np.arange(1,13)
+money_2020 = np.random.randint(100,150,12)
+money_2019 = np.random.randint(200,250,12)
+
+#创建figure窗口对象
+plt.figure('股票分析走势图', facecolor = 'aqua')
+#基本设置
+plt.title('2019年股票走势图')
+plt.xlabel('月份')
+plt.ylabel('金额')
+plt.tick_params(labelsize = 8)  #设置刻度文本的大小
+plt.plot(month, money_2019, label='2019')
+plt.legend()
+plt.grid(linestyle=':', alpha = 0.6, color= 'green') #网格线
+plt.show()
+#+end_src
+
+/*pycharm在运行时不能显示窗口，可以直接在terminal运行.py文件*/
+*** 布局：
+**** 矩阵式布局
+subplot(行，列，编号)
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+plt.rcParams['font.sans-serif'] = ['Kai']
+month = np.arange(1,13)
+money_2020 = np.random.randint(100,150,12)
+money_2019 = np.random.randint(200,250,12)
+
+
+plt.figure('股票分析走势图', facecolor = 'aqua')
+
+#subplot布局安排
+plt.subplot(2,1,1)
+
+
+plt.title('2019年股票走势图')
+plt.xlabel('月份')
+plt.ylabel('金额')
+plt.tick_params(labelsize = 8)
+plt.plot(month, money_2019, label='2019')
+plt.legend()
+plt.grid(linestyle=':', alpha = 0.6, color= 'green')
+
+#subplot布局安排
+plt.subplot(2,1,2)
+plt.title('2020年股票走势图')
+plt.xlabel('月份')
+plt.ylabel('金额')
+plt.tick_params(labelsize = 8)
+plt.plot(month, money_2020, label='2020')
+plt.legend()
+plt.grid(linestyle=':', alpha = 0.6, color= 'red')
+
+plt.tight_layout() #紧凑型布局防止数据折叠
+plt.show()
+#+end_src
+
+#+RESULTS:
+: None
+
+***** 案例：9宫格案例显示：
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['font.sans-serif'] = ['Kai']
+plt.figure('矩阵式布局-九宫格', facecolor = 'aqua')
+
+
+chs = "".join([chr(x) for x in range(97, 123)]) #数字转换成字母
+
+for i in range(1,10):
+    plt.subplot(3,3,i)
+    plt.xticks([])
+    plt.yticks([])
+    #文本显示
+    plt.text(
+        0.5, 0.5 ,
+        chs[(i-1)*3: i*3],
+        size =36,
+        va = 'center',
+        ha = 'center'
+    )
+plt.show()
+#+end_src
+
+**** 网格式布局
+北上广深江苏布局
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['font.sans-serif'] = ['Kai']
+plt.figure('网格式布局', facecolor='yellow')
+
+gs = plt.GridSpec(3,3)
+
+def city_loc(cell, city):
+    plt.subplot(cell)
+    plt.xticks([])
+    plt.yticks([])
+    plt.text
+    plt.text(0.5, 0.5, city, va='center', ha='center')
+
+city_loc(gs[0,:2],'北京')
+city_loc(gs[:2,-1],'上海')
+city_loc(gs[-1,1:], '广州')
+city_loc(gs[1:,0],'深圳')
+city_loc(gs[1,1],'江苏')
+plt.show()
+#+end_src
+
+#+RESULTS:
+: None
+
+**** 自由式布局
+自由式布局axes
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['font.sans-serif'] = ['Kai']
+plt.figure('自由式布局', facecolor='lightgrey')
+
+plt.axes([0.05,0.05,0.5,0.4])
+plt.text(0.5,0.5,'上海', size=36, va='center', ha='center')
+
+plt.axes([0.05, 0.5, 0.5, 0.4]) #x轴，y轴，宽度，高度
+plt.text(0.5,0.5,'中国', size=36, va='center', ha='center')
+
+plt.show()
+#+end_src
+
+**** 散点图
+scatter
+#+begin_src python
+#散点图，人体身高体重图
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['font.sans-serif'] = ['Kai']
+plt.figure('散点图', facecolor='pink')
+plt.title('亚洲人的身高-体重分布图')
+plt.xlabel('体重')
+plt.ylabel('身高')
+weight = np.random.normal(135,10,100)
+height = np.random.normal(168,10,100)
+
+plt.scatter(weight,height)
+plt.show()
+#+end_src
+
+调色板cmap, 可以通过网上查找[[https://blog.csdn.net/ztf312/article/details/102474190]]
+#+begin_src python
+#颜色调节
+#散点图，人体身高体重图
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['font.sans-serif'] = ['Kai']
+plt.figure('散点图', facecolor='pink')
+plt.title('亚洲人的身高-体重分布图')
+plt.xlabel('体重')
+plt.ylabel('身高')
+weight = np.random.normal(135,10,100)
+height = np.random.normal(168,10,100)
+
+d = (168 - height) ** 2 + (135 - weight)**2
+plt.scatter(weight,height, cmap='jet', c=d) #c设置颜色，cmap调色板给调色板基色，
+plt.colorbar() #显示颜色板
+plt.show()
+#+end_src
+
+**** 柱状图和饼图
+***** 柱状图
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+#橘子，苹果的销量
+month = np.arange(1,13)
+apples = np.random.randint(20,40,12)
+oranges = np.random.randint(10,30,12)
+plt.rcParams['font.sans-serif'] = ['Kai']
+plt.figure('柱状图',facecolor='grey')
+plt.title('橘子-苹果销售走势图')
+plt.xlabel("月份")
+plt.ylabel("销量")
+#第一种解决方案：设置偏移
+
+plt.bar(month-0.2, apples, color='green', width=0.4) #第一个元素的位置调整，
+plt.bar(month+0.2, oranges, color='blue', width=0.4)
+plt.show()
+#+end_src
+
+#+RESULTS:
+: None
+
+
+
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+#橘子，苹果的销量
+month = np.arange(1,13)
+apples = np.random.randint(20,40,12)
+oranges = np.random.randint(10,30,12)
+plt.rcParams['font.sans-serif'] = ['Kai']
+plt.figure('柱状图',facecolor='grey')
+plt.title('橘子-苹果销售走势图')
+plt.xlabel("月份")
+plt.ylabel("销量")
+
+#第二种解决方案：+ -
+plt.bar(month-0.2, apples, color='green', width=0.4) #第一个元素的位置调整，
+plt.bar(month+0.2, -oranges, color='blue', width=0.4)
+plt.show()
+#+end_src
+
+调整月份和标签
+#+begin_src python
+import matplotlib.pyplot as plt
+import numpy as np
+#橘子，苹果的销量
+
+month = np.arange(1,13)
+apples = np.random.randint(20,40,12)
+oranges = np.random.randint(10,30,12)
+plt.rcParams['font.sans-serif'] = ['FangSong']
+plt.figure('柱状图',facecolor='grey')
+plt.title('橘子-苹果销售走势图')
+plt.xlabel("月份")
+plt.ylabel("销量")
+plt.xticks(month,['%s月'%x for x in range(1,13)])
+plt.bar(month-0.2, apples, color='green', width=0.4, label='苹果')
+plt.bar(month+0.2, -oranges, color='blue', width=0.4, label='橘子')
+
+plt.show()
+#+end_src
+
+#+RESULTS:
+: None
+
+***** Org-babel 用法
+#+begin_src python :session :results file
+import matplotlib
+import matplotlib.pyplot as plt
+fig=plt.figure(figsize=(3,2))
+plt.plot([1,3,2])
+fig.tight_layout()
+
+fname = 'images/myfig.pdf'
+plt.savefig(fname)
+fname # return this to org-mode
+#+end_src
+
+#+RESULTS:
+[[file:images/myfig.pdf]]
+[[https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-python.html]]
